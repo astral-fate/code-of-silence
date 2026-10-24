@@ -1,0 +1,7 @@
+{"type": "residents", "day": 1, "warned": false, "new_sick": 19}
+{"type": "residents", "day": 2, "warned": false, "new_sick": 10}
+{"type": "residents", "day": 3, "warned": false, "new_sick": 6}
+{"type": "residents", "day": 4, "warned": false, "new_sick": 4}
+{"type": "residents", "day": 5, "warned": false, "new_sick": 2}
+{"type": "residents", "day": 6, "warned": false, "new_sick": 8}
+{"type": "summary", "insider_model": "silent", "n_residents": 60, "n_insiders": 0, "incident": "public_harm", "incentive": true, "channel": false, "mitigation": "none", "seed": 9, "run_id": "silent__public_harm__M0__inc1__ch0__none__N60__s9", "warned_day": null, "mislead_day": null, "leak_day": null, "n_sick": 49, "frac_sick": 0.8166666666666667, "contaminated_purchases": 326, "insider_parse_fail": 0, "post_labels": {}, "subject": "Wren E."}

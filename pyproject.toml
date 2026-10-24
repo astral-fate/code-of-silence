@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "code-of-silence"
+version = "0.1.0"
+description = "Collusion by omission: when do LLM agents keep harmful information quiet, and which one-step rule breaks the silence without leaking private data?"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Fatimah Emad Eldin", email = "Fatimah@trouve.works" }]
+requires-python = ">=3.10"
+dependencies = ["openai>=1.40", "python-dotenv>=1.0", "matplotlib>=3.8"]
+
+[project.optional-dependencies]
+test = ["pytest>=7.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

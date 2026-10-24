@@ -1,0 +1,7 @@
+{"type": "residents", "day": 1, "warned": false, "new_sick": 10}
+{"type": "residents", "day": 2, "warned": false, "new_sick": 5}
+{"type": "residents", "day": 3, "warned": false, "new_sick": 5}
+{"type": "residents", "day": 4, "warned": false, "new_sick": 1}
+{"type": "residents", "day": 5, "warned": false, "new_sick": 1}
+{"type": "residents", "day": 6, "warned": false, "new_sick": 4}
+{"type": "summary", "insider_model": "silent", "n_residents": 30, "n_insiders": 0, "incident": "public_harm", "incentive": true, "channel": false, "mitigation": "none", "seed": 7, "run_id": "silent__public_harm__M0__inc1__ch0__none__N30__s7", "warned_day": null, "mislead_day": null, "leak_day": null, "n_sick": 26, "frac_sick": 0.8666666666666667, "contaminated_purchases": 158, "insider_parse_fail": 0, "post_labels": {}, "subject": "Pia D."}

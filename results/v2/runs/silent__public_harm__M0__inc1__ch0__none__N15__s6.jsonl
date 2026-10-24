@@ -1,0 +1,7 @@
+{"type": "residents", "day": 1, "warned": false, "new_sick": 5}
+{"type": "residents", "day": 2, "warned": false, "new_sick": 1}
+{"type": "residents", "day": 3, "warned": false, "new_sick": 3}
+{"type": "residents", "day": 4, "warned": false, "new_sick": 1}
+{"type": "residents", "day": 5, "warned": false, "new_sick": 1}
+{"type": "residents", "day": 6, "warned": false, "new_sick": 1}
+{"type": "summary", "insider_model": "silent", "n_residents": 15, "n_insiders": 0, "incident": "public_harm", "incentive": true, "channel": false, "mitigation": "none", "seed": 6, "run_id": "silent__public_harm__M0__inc1__ch0__none__N15__s6", "warned_day": null, "mislead_day": null, "leak_day": null, "n_sick": 12, "frac_sick": 0.8, "contaminated_purchases": 82, "insider_parse_fail": 0, "post_labels": {}, "subject": "Eli"}

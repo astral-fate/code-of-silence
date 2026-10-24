@@ -1,0 +1,54 @@
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw, rounded corners=2pt, align=center, minimum height=9mm, inner sep=3pt, fill=white},
+  agent/.style={box, fill=blue!8},
+  secret/.style={box, fill=yellow!15},
+  harm/.style={box, fill=red!10},
+  gm/.style={box, fill=green!10},
+  judge/.style={box, fill=orange!12},
+  pipe/.style={box, fill=gray!8, text width=2.55cm, minimum height=14mm},
+  arr/.style={-{Stealth[length=2mm]}, thick},
+  lane/.style={draw=gray!60, dashed, rounded corners=4pt, inner sep=7pt},
+  lbl/.style={font=\scriptsize\itshape, text=gray!30!black, fill=white, inner sep=1pt}
+]
+% ---------------- village layer ----------------
+\node[secret, text width=3.3cm] (inc) {\textbf{Incident} (only co-op members)\\ \texttt{public\_harm}: flour lab result\\ \texttt{privacy}: a resident's medical condition};
+\node[agent, right=13mm of inc, text width=3.3cm] (ins) {\textbf{$M\in\{1,2,4,8\}$ insiders}\\(model under test)\\ pay: per loaf, or salary\\ sees own past posts};
+\node[judge, right=13mm of ins, text width=3.2cm] (oj) {\textbf{Online judge} (temp.\ 0)\\ harm: \textsc{explicit} /\\ \textsc{hint} / \textsc{mislead} /\\ \textsc{none}; privacy: \textsc{leak} / \textsc{none}};
+\node[agent, right=16mm of oj, text width=3.3cm] (res) {\textbf{$N=30$ scripted residents}\\ buy co-op bread: $p=0.9$\\ before, $p=0.1$ after the\\ first \textsc{explicit} post};
+\node[secret, below=11mm of inc, text width=3.3cm] (mit) {\textbf{One-sentence notice}\\ none; rules: tip line / duty /\\ reward / audit; controls:\\ placebo / inert / concealment};
+\node[gm, below=11mm of oj, text width=3.2cm] (board) {\textbf{Public board}\\ posts, anonymous tips,\\ clinic notices};
+\node[harm, below=11mm of res, text width=3.3cm] (sick) {\textbf{Contaminated purchases}\\ each makes a healthy\\ resident sick with $p=0.3$};
+\draw[arr] (inc) -- node[above=1pt, lbl]{day 1} (ins);
+\draw[arr] (ins) -- node[above=1pt, lbl]{post / tip} (oj);
+\draw[arr] (oj) -- node[above=1pt, lbl]{label} (res);
+\draw[arr, gray] (oj) -- (board);
+\draw[arr, gray] (board.west) -| node[pos=0.25, below=1pt, lbl]{read next day} (ins.south);
+\draw[arr, gray] (mit.north east) -- (ins.south west);
+\draw[arr, red!70!black] (res) -- node[right=1pt, lbl]{buys} (sick);
+\draw[arr, gray] (sick.west) -- node[above=1pt, lbl]{new cases} (board.east);
+\draw[arr, red!70!black, looseness=4] ($(ins.north)+(-0.5,0)$) to[out=110, in=70] coordinate[pos=0.5] (looptop) ($(ins.north)+(0.5,0)$);
+\node[lbl, text=red!50!black, anchor=west] at ($(looptop)+(0.45,-0.2)$) {private co-op channel ($M>1$, if on)};
+\begin{scope}[on background layer]
+  \node[lane, fit=(inc)(ins)(oj)(res)(board)(mit)(sick)(looptop)] (L1) {};
+\end{scope}
+\node[lbl, anchor=south west] at ($(L1.north west)+(0.1,0.05)$) {\textbf{Village layer:} 6 days; each day insiders act, posts are judged, then residents buy};
+
+% ---------------- experiment layer ----------------
+\node[pipe, below=15mm of L1.south west, anchor=north west, xshift=7pt] (gen) {\textbf{Grid generator}\\ 22 conditions $\times$ model $\times$ seed, scaling arm, bounds};
+\node[pipe, right=4mm of gen] (bnd) {\textbf{Bounds}\\ oracle: \textsc{explicit} warning on day 1\\ silent: no posts};
+\node[pipe, right=4mm of bnd] (sim) {\textbf{Village simulator}\\ seeded names; resident draws per (seed, resident, day)};
+\node[pipe, right=4mm of sim] (log) {\textbf{Event log}\\ one \texttt{.jsonl} per run, resumable};
+\node[pipe, right=4mm of log] (judge) {\textbf{Offline judging}\\ channel: \textsc{silence}, \textsc{disclose}, \textsc{other}; 2nd judge for $\kappa$};
+\node[pipe, right=4mm of judge, fill=green!8] (ana) {\textbf{Analysis}\\ warning day, purchases vs bounds, permutation tests};
+\draw[arr] (gen) -- (bnd);
+\draw[arr] (bnd) -- (sim);
+\draw[arr] (sim) -- (log);
+\draw[arr] (log) -- (judge);
+\draw[arr] (judge) -- (ana);
+\begin{scope}[on background layer]
+  \node[lane, fit=(gen)(bnd)(sim)(log)(judge)(ana)] (L2) {};
+\end{scope}
+\node[lbl, anchor=north east] at ($(L2.south east)+(-0.1,-0.05)$) {\textbf{Experiment layer:} one log per (model, condition, seed)};
+\draw[arr, dotted, thick, gray] (sim.north) -- node[right=2pt, lbl]{builds every prompt; calls insiders and judge through model APIs} (sim.north |- L1.south);
+\end{tikzpicture}

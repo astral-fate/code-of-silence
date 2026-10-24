@@ -1,0 +1,38 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.env
+.omc/
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out
+
+# credentials and local notes (never published)
+.env
+*.env
+!.env.example
+env.txt
+api.txt
+compute.env
+*.key
+# internal review notes and drafts
+docs/review_*.md
+docs/judge_review.md
+paper/main.backup.tex
+paper/main.pre_rewrite.tex
+paper/out.txt
+paper/build*.log
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out
+paper/*.synctex.gz
+results/**/*.partial-*
+
+# earlier design, not part of the reported study
+results/core_v1/
