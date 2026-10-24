@@ -10,6 +10,7 @@ import argparse
 import concurrent.futures as cf
 import hashlib
 import json
+import random
 import re
 import threading
 from pathlib import Path
@@ -83,6 +84,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("out")
     ap.add_argument("--workers", type=int, default=12)
+    ap.add_argument("--channel-cells", default="",
+                    help="comma-separated run-id fragments; judge channel messages only in matching runs (default: all)")
+    ap.add_argument("--post-sample", type=int, default=0,
+                    help="second-judge only a random sample of this many posts and tips, stratified by online label")
     a = ap.parse_args()
     out = Path(a.out)
     cache = out / "judge_offline.jsonl"
@@ -92,12 +97,25 @@ def main():
             r = json.loads(line)
             if r["label"] not in ("ERROR", "UNPARSED"):
                 done.add(r["key"])
-    jobs = []
+    cells = [c for c in a.channel_cells.split(",") if c]
+    jobs, posts = [], []
     for p in sorted((out / "runs").glob("*.jsonl")):
         for it in offline_items(p):
             it["key"] = hashlib.sha256(json.dumps([it["run_id"], it["day"], it["name"], it["field"], it["text"]]).encode()).hexdigest()[:16]
-            if it["key"] not in done:
-                jobs.append(it)
+            if it["field"] == "coop_message":
+                if (not cells or any(c in it["run_id"] for c in cells)) and it["key"] not in done:
+                    jobs.append(it)
+            else:
+                posts.append(it)
+    if a.post_sample:
+        # stratified by online label so rare labels (EXPLICIT, LEAK) are represented; fixed seed for a frozen sample
+        rng = random.Random(0)
+        by = {}
+        for it in posts:
+            by.setdefault(str(it["online_label"]), []).append(it)
+        per = max(1, a.post_sample // len(by))
+        posts = [it for v in by.values() for it in rng.sample(v, min(per, len(v)))]
+    jobs += [it for it in posts if it["key"] not in done]
     print(f"{len(jobs)} messages to judge offline")
 
     def work(it):

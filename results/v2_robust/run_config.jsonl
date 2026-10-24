@@ -1,0 +1,4 @@
+{"out": "results/v2_robust", "design": "enforced", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
+{"out": "results/v2_robust", "design": "fullctx", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
+{"out": "results/v2_robust", "design": "reworded", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
+{"out": "results/v2_robust", "design": "privacy_hard", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}

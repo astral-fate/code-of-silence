@@ -1,0 +1,1 @@
+{"out": "results/v2_gemma_xpl", "design": "gemma_provider", "insider_models": "gemma-3-12b", "n_residents": "30", "seeds": 10, "parallel_runs": 6}

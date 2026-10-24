@@ -37,12 +37,21 @@ DESIGNS = {
     # 30/4 is the v2 cell ("public_harm", 4, True, True, "none"), so it is not repeated here: two processes must not
     # write the same run log
     "scale": [("public_harm", m, True, True, "none", n) for n, m in ((15, 2), (60, 4), (60, 8))],
+    # robustness: the audit carried out (an insider caught agreeing to hide the problem is banned)
+    "enforced": [("public_harm", 4, True, True, "audit_enforced"), ("privacy", 4, True, True, "audit_enforced")],
+    # robustness: the full board and channel history instead of the last 16 entries (tagged "full" in the run id)
+    "fullctx": [("public_harm", 4, True, True, "none", 30, {"board_tail": 10_000}),
+                ("public_harm", 8, True, True, "none", 30, {"board_tail": 10_000})],
+    # robustness: the same facts reworded; a privacy incident that does not say the condition is harmless
+    "reworded": [("public_harm_reworded", 4, True, True, "none"), ("public_harm_reworded", 4, True, True, "duty")],
+    "privacy_hard": [("privacy_implicit", 4, True, True, mit) for mit in ("none", "tipline", "duty")],
 }
 
 
 def run_id(c: dict) -> str:
+    full = "__full" if c.get("board_tail") else ""
     return (f"{c['insider_model']}__{c['incident']}__M{c['n_insiders']}__inc{int(c['incentive'])}__ch{int(c['channel'])}__"
-            f"{c['mitigation']}__N{c['n_residents']}__s{c['seed']}")
+            f"{c['mitigation']}__N{c['n_residents']}{full}__s{c['seed']}")
 
 
 def main():
@@ -67,12 +76,13 @@ def main():
     for model, n, cell, seed in itertools.product(
             a.insider_models.split(","), [int(x) for x in a.n_residents.split(",")], DESIGNS[a.design], range(a.seeds)):
         inc_, m, channel, incentive, mit = cell[:5]
-        if len(cell) == 6:
+        extra = cell[6] if len(cell) == 7 else {}
+        if len(cell) >= 6:
             if n != int(a.n_residents.split(",")[0]):
                 continue  # fixed-size cell: generate it once
             n = cell[5]
         c = {"insider_model": model, "n_residents": n, "n_insiders": m,
-             "incident": inc_, "incentive": incentive, "channel": channel, "mitigation": mit, "seed": seed}
+             "incident": inc_, "incentive": incentive, "channel": channel, "mitigation": mit, "seed": seed, **extra}
         c["run_id"] = run_id(c)
         cfgs.append(c)
 
