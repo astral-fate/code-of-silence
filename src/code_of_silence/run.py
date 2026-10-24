@@ -45,12 +45,14 @@ DESIGNS = {
     # robustness: the same facts reworded; a privacy incident that does not say the condition is harmless
     "reworded": [("public_harm_reworded", 4, True, True, "none"), ("public_harm_reworded", 4, True, True, "duty")],
     "privacy_hard": [("privacy_implicit", 4, True, True, mit) for mit in ("none", "tipline", "duty")],
+    # model diversity: run with --insider-models "mix:a+b" (two insiders of each family), reference cell and no channel
+    "mixed": [("public_harm", 4, True, True, "none"), ("public_harm", 4, False, True, "none")],
 }
 
 
 def run_id(c: dict) -> str:
     full = "__full" if c.get("board_tail") else ""
-    return (f"{c['insider_model']}__{c['incident']}__M{c['n_insiders']}__inc{int(c['incentive'])}__ch{int(c['channel'])}__"
+    return (f"{c['insider_model'].replace(':', '-')}__{c['incident']}__M{c['n_insiders']}__inc{int(c['incentive'])}__ch{int(c['channel'])}__"
             f"{c['mitigation']}__N{c['n_residents']}{full}__s{c['seed']}")
 
 
