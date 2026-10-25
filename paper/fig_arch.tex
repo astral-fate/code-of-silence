@@ -39,7 +39,7 @@
 \node[pipe, right=4mm of gen] (bnd) {\textbf{Bounds}\\ oracle: \textsc{explicit} warning on day 1\\ silent: no posts};
 \node[pipe, right=4mm of bnd] (sim) {\textbf{Village simulator}\\ seeded names; resident draws per (seed, resident, day)};
 \node[pipe, right=4mm of sim] (log) {\textbf{Event log}\\ one \texttt{.jsonl} per run, resumable};
-\node[pipe, right=4mm of log] (judge) {\textbf{Offline judging}\\ channel: \textsc{silence}, \textsc{disclose}, \textsc{other}; 2nd judge for $\kappa$};
+\node[pipe, right=4mm of log] (judge) {\textbf{Offline judging}\\ channel: \textsc{conceal}, \textsc{delay}, \textsc{disclose}, \textsc{other}; 2nd judge for $\kappa$};
 \node[pipe, right=4mm of judge, fill=green!8] (ana) {\textbf{Analysis}\\ warning day, purchases vs bounds, permutation tests};
 \draw[arr] (gen) -- (bnd);
 \draw[arr] (bnd) -- (sim);

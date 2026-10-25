@@ -8,3 +8,5 @@
 {"out": "results/v2_robust", "design": "reworded", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
 {"out": "results/v2_robust", "design": "privacy_hard", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
 {"out": "results/v2_robust", "design": "mixed", "insider_models": "mix:gemma-3-12b+gpt-oss-120b-or,mix:gemma-3-12b+gpt-4.1-mini", "n_residents": "30", "seeds": 10, "parallel_runs": 3}
+{"out": "results/v2_robust", "design": "notes", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 4}
+{"out": "results/v2_robust", "design": "tipfield", "insider_models": "llama-3.1-8b,gpt-4.1-mini,gemma-3-12b,gpt-oss-120b-or", "n_residents": "30", "seeds": 10, "parallel_runs": 4}

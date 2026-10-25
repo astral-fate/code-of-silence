@@ -47,11 +47,15 @@ DESIGNS = {
     "privacy_hard": [("privacy_implicit", 4, True, True, mit) for mit in ("none", "tipline", "duty")],
     # model diversity: run with --insider-models "mix:a+b" (two insiders of each family), reference cell and no channel
     "mixed": [("public_harm", 4, True, True, "none"), ("public_harm", 4, False, True, "none")],
+    # load control: no channel, but a private notes field with the same prompt clause and output field
+    "notes": [("public_harm", 4, False, True, "none", 30, {"notes": True})],
+    # the tip line's output field without its notice: does the field alone bring warnings forward?
+    "tipfield": [("public_harm", 4, True, True, "tipfield")],
 }
 
 
 def run_id(c: dict) -> str:
-    full = "__full" if c.get("board_tail") else ""
+    full = ("__full" if c.get("board_tail") else "") + ("__notes" if c.get("notes") else "")
     return (f"{c['insider_model'].replace(':', '-')}__{c['incident']}__M{c['n_insiders']}__inc{int(c['incentive'])}__ch{int(c['channel'])}__"
             f"{c['mitigation']}__N{c['n_residents']}{full}__s{c['seed']}")
 

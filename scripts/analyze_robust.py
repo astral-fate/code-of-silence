@@ -180,6 +180,89 @@ for mix, tag in MIXTAG.items():
             if r:
                 res[f"mix/{tag}/{name}/{k}"] = {"est": r[0], "lo": r[1], "hi": r[2], "per_model": {}, "n_a": len(gr[0]), "n_b": len(gr[1])}
                 M[f"rb/mix/{tag}/{name}/{k}"], M[f"rb/mix/{tag}/{name}/{k}/lo"], M[f"rb/mix/{tag}/{name}/{k}/hi"] = map(f, r)
+
+
+# independence null for mixed villages: the first warning is the earliest by any insider, so if insiders decide
+# independently a 2+2 village stays silent through day d with probability sqrt(S_a(d) * S_b(d)), where S is the
+# share of single-family villages (four insiders) still silent by the end of day d
+def surv(days):
+    return [sum(x > d for x in days) / len(days) for d in range(1, 7)]
+
+
+def indep_day(a, b):
+    return 1 + sum((x * y) ** 0.5 for x, y in zip(surv(a), surv(b)))
+
+
+rng = random.Random(11)
+for mix, tag in MIXTAG.items():
+    a, b = mix[4:].split("+")
+    for ch in (True, False):
+        A, B, X = ([metric(s, "day") for s in c] for c in (homcell(a, ch), homcell(b, ch), mixcell(mix, ch)))
+        if not (A and B and X):
+            continue
+        pred = indep_day(A, B)
+        draws = sorted(sum(rng.choice(X) for _ in X) / len(X) - indep_day([rng.choice(A) for _ in A], [rng.choice(B) for _ in B])
+                       for _ in range(5000))
+        obs = sum(X) / len(X)
+        res[f"mix/{tag}/indep/ch{int(ch)}"] = {"obs": obs, "pred": pred, "est": obs - pred, "lo": draws[125], "hi": draws[4874]}
+        M[f"rb/mix/{tag}/indep/ch{int(ch)}/pred"] = f"{pred:.1f}"
+        f = (lambda x: f"{x:+.1f}".replace("-", "$-$"))
+        M[f"rb/mix/{tag}/indep/ch{int(ch)}"], M[f"rb/mix/{tag}/indep/ch{int(ch)}/lo"], M[f"rb/mix/{tag}/indep/ch{int(ch)}/hi"] = \
+            f(obs - pred), f(draws[125]), f(draws[4874])
+# load control: a private notes field (same prompt clause and output field as the channel, read only by its writer)
+def notescell(model):
+    return [s for s in rob.values() if s["insider_model"] == model and s["incident"] == "public_harm" and not s["channel"]
+            and s["mitigation"] == "none" and s["n_insiders"] == 4 and s["n_residents"] == 30 and "__notes" in s["run_id"]]
+
+
+notes = {m: notescell(m) for m in MODELS}
+ch_on = {m: homcell(m, True) for m in MODELS}
+ch_off = {m: homcell(m, False) for m in MODELS}
+for key, (A, B) in {"notes_vs_nochannel": (notes, ch_off), "channel_vs_notes": (ch_on, notes),
+                    "channel_vs_nochannel": (ch_on, ch_off)}.items():
+    for k in ("day", "gap"):
+        r = contrast(A, B, k)
+        if r is None:
+            continue
+        est, lo, hi, per = r
+        res[f"{key}/{k}"] = {"est": est, "lo": lo, "hi": hi, "per_model": per, "n_a": sum(map(len, A.values())),
+                             "n_b": sum(map(len, B.values()))}
+        sc = 1 if k == "day" else 100
+        f = (lambda x: f"{x * sc:+.1f}".replace("-", "$-$"))
+        M[f"rb/{key}/{k}"], M[f"rb/{key}/{k}/lo"], M[f"rb/{key}/{k}/hi"] = f(est), f(lo), f(hi)
+        for m, v in per.items():
+            M[f"rb/{key}/{k}/{TAG[m]}"] = f(v)
+M["rb/notes/runs"] = str(sum(map(len, notes.values())))
+# the tip line's output field without its notice
+tipfield, tipline, none_ = (cell(rob, "public_harm", 4, "tipfield"), cell(main, "public_harm", 4, "tipline"),
+                            cell(main, "public_harm", 4, "none"))
+for key, (A, B) in {"tipfield_vs_none": (tipfield, none_), "tipline_vs_tipfield": (tipline, tipfield)}.items():
+    for k in ("day", "gap"):
+        r = contrast(A, B, k)
+        if r is None:
+            continue
+        est, lo, hi, per = r
+        res[f"{key}/{k}"] = {"est": est, "lo": lo, "hi": hi, "per_model": per, "n_a": sum(map(len, A.values())),
+                             "n_b": sum(map(len, B.values()))}
+        sc = 1 if k == "day" else 100
+        f = (lambda x: f"{x * sc:+.1f}".replace("-", "$-$"))
+        M[f"rb/{key}/{k}"], M[f"rb/{key}/{k}/lo"], M[f"rb/{key}/{k}/hi"] = f(est), f(lo), f(hi)
+        for m, v in per.items():
+            M[f"rb/{key}/{k}/{TAG[m]}"] = f(v)
+# warnings delivered through the anonymous tip field in the tip-line cell
+tip = [s for s in main.values() if s["incident"] == "public_harm" and s["mitigation"] == "tipline" and s["n_insiders"] == 4
+       and s["insider_model"] in MODELS and s["warned_day"]]
+M["rb/tip/warned"] = str(len(tip))
+by_tip = 0
+for s in tip:
+    first = []
+    for x in (MAIN / "runs" / f"{s['run_id']}.jsonl").read_text(encoding="utf-8").splitlines():
+        e = json.loads(x)
+        if e.get("type") == "insider" and e["day"] == s["warned_day"]:
+            first += [f for f, lab in (e.get("labels") or {}).items() if lab == "EXPLICIT"]
+    by_tip += bool(first) and all(f == "anonymous_tip" for f in first)
+M["rb/tip/only_tip"] = str(by_tip)
+M["rb/tip/only_tip_pct"] = f"{100 * by_tip / len(tip):.0f}" if tip else "--"
 for k, v in M.items():
     if k.startswith("rb/mix/") and "/ch" in k:
         print(k, v)
@@ -189,5 +272,7 @@ lines = ["% Generated by scripts/analyze_robust.py. Do not edit by hand.", r"\ma
 lines += [rf"\expandafter\def\csname cos@{k}\endcsname{{{v}}}" for k, v in sorted(M.items())]
 (ROOT / "paper" / "numbers_robust.tex").write_text("\n".join(lines + [r"\makeatother"]) + "\n", encoding="utf-8")
 for k, v in res.items():
+    if "n_a" not in v:
+        continue
     print(f"{k:34s} {v['est']:+.3f} [{v['lo']:+.3f}, {v['hi']:+.3f}]  n {v['n_a']}/{v['n_b']}  ", {TAG[m]: round(x, 2) for m, x in v["per_model"].items()})
 print({k: v for k, v in M.items() if "/" in k and k.count("/") <= 2 and not k.endswith(("lo", "hi"))}.get("rb/enforced/bans"), M.get("rb/enforced/runs_with_ban"))

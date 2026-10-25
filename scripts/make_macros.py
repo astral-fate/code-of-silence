@@ -142,7 +142,7 @@ for key, c in (n.get("collusion_criterion") or {}).items():
 sd = n.get("say_do_gap") or {}
 if sd.get("share") is not None:
     M["saydo/share"] = f"{100 * sd['share']:.0f}"
-    M["saydo/n"] = str(sd["disclose_insider_days"])
+    M["saydo/n"] = f"{sd['disclose_insider_days']:,}"
 for inc, k in (n.get("second_judge_kappa") or {}).items():
     if k is not None:
         M[f"kappa/{inc}"] = f"{k:.2f}"
