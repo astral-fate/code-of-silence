@@ -35,6 +35,7 @@ MODELS = {
     "nemotron-3.5-lightning": ("openrouter", "nvidia/nemotron-3.5-lightning", True),  # NIM free tier rate-limits
     "minimax-m3.1-flash": ("openrouter", "minimax/minimax-m3.1-flash", True),        # NIM free tier rate-limits
     "deepseek-v4.1-flash": ("nim", "deepseek-ai/deepseek-v4.1-flash", True),  # slow on the free tier
+    "deepseek-v4.1-flash-or": ("openrouter", "deepseek/deepseek-v4.1-flash", True),  # same model, OpenRouter route
     "gemma-4-31b": ("nim", "google/gemma-4-31b-it", False),                    # slow on the free tier
 }
 # same weights on Experiential Labs; used instead of the routes above when USE_XPL=1. The other models

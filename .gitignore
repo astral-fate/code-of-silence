@@ -36,3 +36,6 @@ results/**/*.partial-*
 
 # earlier design, not part of the reported study
 results/core_v1/
+
+*.fdb_latexmk
+*.fls
