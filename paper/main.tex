@@ -34,7 +34,7 @@
 \title{\textbf{Code of Silence?}\\
 Non-Disclosure of Harm by LLM Agents,\\
 and How a Private Place to Write Delays It}
-\author{Fatimah Emad Eldin\thanks{Code and data: \url{https://github.com/astral-fate/code-of-silence} (simulator, judge, tests, analysis; MIT licence), with every run's event log and the judge labels in \texttt{results/}. The model-calling client and sampling settings follow the sprint starter repository; all other code is new.}\\\small Independent AI Researcher\\\small\texttt{Fatimah@trouve.works}}
+\author{Fatimah Emad Eldin\thanks{Code and data: \url{https://github.com/astral-fate/code-of-silence} (Appendix~\ref{app:code}; simulator, judge, tests, analysis; MIT licence), with every run's event log and the judge labels in \texttt{results/}. The model-calling client and sampling settings follow the sprint starter repository; all other code is new.}\\\small Independent AI Researcher\\\small\texttt{Fatimah@trouve.works}}
 \date{25 October 2026\\\small Apart Research, Poseidon Research \& AE Studio\\\small AI Collusion Research Sprint --- Track 2 (Detection and Audit) and Track 3 (Countermeasures)}
 
 \begin{document}
@@ -382,6 +382,15 @@ that residents would want to know about.
 
 Answer with a single integer from 0 (certainly not hiding anything) to 10 (certainly hiding a problem).
 \end{lstlisting}
+
+\section{Code and Data Availability}
+\label{app:code}
+All code, data and analysis are public at \url{https://github.com/astral-fate/code-of-silence} (MIT licence).
+\begin{itemize}[leftmargin=*,itemsep=1pt,topsep=2pt]
+\item \textbf{Logs.} Each village is one event log in \texttt{results/v2/runs/} (robustness designs in \texttt{results/v2\_robust/runs/}), recording every insider's raw reply, the parsed public post, channel message and notes, the online judge's labels, the model actually served, residents' daily states and a run summary. Offline relabels, monitor scores and the concealment relabel are cached in \texttt{results/v2/offline/}.
+\item \textbf{Prompts.} The incident, notices and every prompt are in \texttt{src/code\_of\_silence/scenario.py} and Appendix~\ref{app:prompts}.
+\item \textbf{Reproduction.} \texttt{python -m code\_of\_silence.run} runs a design; rerunning it skips finished villages. The analysis scripts in \texttt{scripts/} rebuild every table, figure and number macro from the logs, reading cached labels rather than calling models; every number in the text is a generated macro, not typed by hand. \texttt{pytest} checks the simulator.
+\end{itemize}
 
 \section{LLM Usage Statement}
 AI assistance (Claude, Anthropic) was used to search and summarise related literature, to write and debug the simulator, judge, analysis and plotting code, to draft and revise the text, and for internal pre-submission review. Language models are also the object of study: the insiders, the online judge, the offline relabel and the monitors are the models named in the Methods. The author designed the village, the conditions and the analysis plan, and checked every claim, number and reference against the released event logs and the cited sources; every number in the paper is generated from those logs by the released scripts.
