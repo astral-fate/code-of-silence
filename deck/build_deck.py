@@ -588,7 +588,9 @@ for i, (h, sub, d, chips1, chips2, note) in enumerate(cols3):
 text(s, 0.9 + 0.35, y0 + 4.15, cw - 0.7, 2.1,
      [[("Check on the online judge: ", {"bold": True, "color": INK}),
        (f"Gemma-3-12B relabels a stratified sample of {P['kappa_n'][0]} harm and {P['kappa_n'][1]} privacy "
-        f"posts and tips; Cohen's kappa {P['kappa'][0]} and {P['kappa'][1]}.", {"color": SLATE})]],
+        f"posts and tips; Cohen's kappa {P['kappa'][0]} and {P['kappa'][1]}. ", {"color": SLATE}),
+       ("Hand labels (60, blind): ", {"bold": True, "color": INK}),
+       ("warns or stops sales, kappa 0.67; finer labels 0.33 to 0.42.", {"color": SLATE})]],
      size=13, font=BODY, spacing=1.06)
 # relabel detail
 rlx = 0.9 + (cw + 0.4)
