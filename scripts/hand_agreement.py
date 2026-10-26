@@ -3,7 +3,7 @@
     python scripts/hand_agreement.py results/v2
 
 Hand labels are read from the annotation database (DATABASE_URL, or ../annotation-space/.dburl), project
-code_of_silence, or, without a database (or with HAND_LABELS=csv), from validation/hand_labels_author.csv; reading the
+code_of_silence, annotator ANNOTATOR (default fatimahemadeldin), or, without a database (or with HAND_LABELS=csv), from validation/hand_labels_author.csv; reading the
 database also refreshes that export. Item cos-NNN is row NNN of validation/answer_key_DO_NOT_OPEN.csv. Posts and tips
 are compared with DeepSeek-V4.1-Flash's offline relabel (same six labels; also coarsened to warns-or-protects and to
 misdirection) and, as WARN or PROTECT against the rest, with the online judge's EXPLICIT label, which defines warning day. Channel messages are compared with GPT-4.1-mini's SILENCE / DISCLOSE / OTHER
@@ -33,7 +33,8 @@ if url and os.environ.get("HAND_LABELS") != "csv":
     import psycopg
     with psycopg.connect(url, connect_timeout=20) as c:
         hand = {r[0]: r[1] for r in c.execute(
-            "select item_id, label from collusion_annotations where project = 'code_of_silence' and label is not null")}
+            "select item_id, label from collusion_annotations where project = 'code_of_silence' and label is not null"
+            " and annotator = %s", (os.environ.get("ANNOTATOR", "fatimahemadeldin"),))}
     with open(EXPORT, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["item", "type", "run_id", "insider_model", "notice", "day", "hand_label"])

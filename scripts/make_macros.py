@@ -97,6 +97,7 @@ if off.exists():
     for m, d in o.items():
         if m not in MODEL or not isinstance(d, dict):
             continue
+        M[f"off/{MODEL[m]}/runs"] = str(d.get("runs", "--"))
         for k in ("false_reassure", "half_truth", "promote"):
             v = d.get(f"share_runs_pre_warning_{k}")
             if v is not None:
