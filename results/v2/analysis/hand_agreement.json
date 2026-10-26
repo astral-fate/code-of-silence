@@ -1,0 +1,87 @@
+{
+ "n": 53,
+ "posts": 33,
+ "unmatched": [
+  "cos-037"
+ ],
+ "post_relabel": {
+  "n": 32,
+  "agree": 9,
+  "kappa": 0.14018691588785046,
+  "confusion": {
+   "FALSE_REASSURE|HALF_TRUTH": 2,
+   "HALF_TRUTH|FALSE_REASSURE": 2,
+   "WARN|WARN": 4,
+   "HALF_TRUTH|PROMOTE": 1,
+   "PROTECT|WARN": 5,
+   "PROTECT|PROTECT": 2,
+   "HALF_TRUTH|OTHER": 5,
+   "FALSE_REASSURE|OTHER": 2,
+   "FALSE_REASSURE|PROMOTE": 1,
+   "WARN|PROTECT": 2,
+   "HALF_TRUTH|WARN": 1,
+   "HALF_TRUTH|PROTECT": 1,
+   "FALSE_REASSURE|FALSE_REASSURE": 2,
+   "PROTECT|FALSE_REASSURE": 1,
+   "HALF_TRUTH|HALF_TRUTH": 1
+  }
+ },
+ "post_stop": {
+  "n": 32,
+  "agree": 29,
+  "kappa": 0.8110236220472441,
+  "confusion": {
+   "False|False": 16,
+   "True|True": 13,
+   "False|True": 2,
+   "True|False": 1
+  }
+ },
+ "post_mis": {
+  "n": 32,
+  "agree": 22,
+  "kappa": 0.40298507462686567,
+  "confusion": {
+   "True|True": 9,
+   "False|False": 13,
+   "True|False": 9,
+   "False|True": 1
+  }
+ },
+ "post_explicit": {
+  "n": 33,
+  "agree": 27,
+  "kappa": 0.605577689243028,
+  "confusion": {
+   "False|False": 19,
+   "True|True": 8,
+   "True|False": 6
+  }
+ },
+ "chan_mini": {
+  "n": 20,
+  "agree": 13,
+  "kappa": 0.33962264150943405,
+  "confusion": {
+   "DISCLOSE|SILENCE": 1,
+   "DISCLOSE|DISCLOSE": 9,
+   "SILENCE|DISCLOSE": 4,
+   "DISCLOSE|OTHER": 1,
+   "SILENCE|OTHER": 1,
+   "SILENCE|SILENCE": 4
+  }
+ },
+ "chan_split": {
+  "n": 20,
+  "agree": 10,
+  "kappa": 0.2805755395683453,
+  "confusion": {
+   "DISCLOSE|OTHER": 4,
+   "DISCLOSE|DISCLOSE": 6,
+   "DISCLOSE|SILENCE": 1,
+   "SILENCE|OTHER": 4,
+   "SILENCE|DISCLOSE": 1,
+   "SILENCE|SILENCE": 4
+  }
+ }
+}
